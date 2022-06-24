@@ -16,6 +16,17 @@ def create_connection(db_file):
 
     return conn
 
+def create_table(conn, create_table_sql):
+    """ create a table from the create_table_sql statement
+    :param conn: Connection object
+    :param create_table_sql: a CREATE TABLE statement
+    :return:
+    """
+    try:
+        c = conn.cursor()
+        c.execute(create_table_sql)
+    except Error as e:
+        print(e)
 
 def select_all_tasks(conn):
     """
@@ -36,8 +47,14 @@ def main():
 
     # create a database connection
     conn = create_connection(database)
-    with conn:
-        select_all_tasks(conn)
+    movies_table = """ CREATE TABLE IF NOT EXISTS Movies (
+                                        name varchar,
+                                        actor varchar,
+                                        actress varchar,
+                                        director varchar
+                                    ); """
+    create_table(conn, movies_table)
+    select_all_tasks(conn)
 
 
 if __name__ == '__main__':
